@@ -25,3 +25,17 @@ export function getAppointmentsForDay(state, day) {
   }
   return filteredApptsForDay
 };
+
+export function getInterview(state, interview) {
+  if (!interview) {
+    return null;
+  }
+  const returnObj = {...interview};
+  const id = interview.interviewer;
+  for (const obj in state.interviewers) {
+    if (obj == id) {
+      returnObj.interviewer = state.interviewers[obj];
+    }
+  }
+  return returnObj;
+};
