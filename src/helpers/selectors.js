@@ -20,11 +20,8 @@ export function getAppointmentsForDay(state, day) {
     }
   }
 
-  if (!filteredApptsForDay.length) {
-    return [];
-  }
-  return filteredApptsForDay
-};
+  return filteredApptsForDay;
+}
 
 export function getInterview(state, interview) {
   if (!interview) {
@@ -38,4 +35,26 @@ export function getInterview(state, interview) {
     }
   }
   return returnObj;
-};
+}
+
+export function getInterviewersForDay(state, day) {
+  const filteredInterviewersForDay = [];
+
+  for (const d of state.days) {
+    //Loop thru days objs
+    if (d.name === day) {
+      //Find day name matched with given day arg
+      for (let id of d.interviewers) {
+        //Loop thru the appointment ids of matched day
+        for (let obj in state.interviewers) {
+          //Loop thru state.interviewers obj to match against day ids
+          if (id == obj) {
+            //If the id of the days appointment matches the state.appoiments id, push into arr
+            filteredInterviewersForDay.push(state.interviewers[obj]);
+          }
+        }
+      }
+    }
+  }
+  return filteredInterviewersForDay;
+}
