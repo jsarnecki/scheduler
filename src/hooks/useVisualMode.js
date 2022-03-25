@@ -18,11 +18,11 @@ export default function useVisualMode(initial) {
       history.pop()
       setMode(history[history.length - 1]);
     }
-  };
+  }
 
   return {
     mode,
     transition,
     back
-  };
+  }
 }
