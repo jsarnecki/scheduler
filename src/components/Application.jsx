@@ -32,17 +32,25 @@ export default function Application(props) {
   
     });
   }, []);
+  
+  const bookInterview = function(id, interview) {
+   console.log(id, interview);
+ }
 
   const mappedAppointments = dailyAppointments.map((appt) => {
 
     const interview = getInterview(state, appt.interview);
+    // console.log("interview:", interview);
     return <Appointment 
               {...appt}
               key={appt.id}
+              id={appt.id}
               interview={interview}
               interviewers={dailyInterviewers}
+              bookInterview={bookInterview}
            />
   });
+
   
   return (
     <main className="layout">
@@ -68,7 +76,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {mappedAppointments}
-        <Appointment key="last" time="5pm" interviewers={dailyInterviewers} />
+        <Appointment key="last" time="5pm" bookInterview={bookInterview} interviewers={dailyInterviewers}  />
       </section>
     </main>
   );

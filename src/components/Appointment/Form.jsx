@@ -9,6 +9,9 @@ export default function Form(props) {
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
+  //onSave now contains the new interview object
+  //Do we use the state student and state interviewer to pass into save / bookInterview???
+
   const onChangeStudent = function(event) {
     setStudent(event.target.value);
   }
@@ -46,7 +49,7 @@ export default function Form(props) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <Button danger onClick={cancel}>Cancel</Button>
-          <Button confirm onClick={onSave}>Save</Button>
+          <Button confirm onClick={() => onSave(student, interviewer)}>Save</Button>
         </section>
       </section>
     </main>
