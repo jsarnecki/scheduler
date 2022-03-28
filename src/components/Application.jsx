@@ -43,15 +43,23 @@ export default function Application(props) {
       [id]: appointment
     };
 
-    //axios put request
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview})
       .then((res) => {
-        // console.log("put complete..", res);
         setState({...state, appointments: appointments});
       })
       .catch(err => console.log(err));
-  //  console.log(id, interview);
  }
+
+
+  const cancelInterview = function(id) {
+      //onClick, needs to go into state, make copy, find w/ id, set to null
+    const appointments = {...state.appointments};
+    appointments[id].interview = null;
+    console.log(`Appointment ${id} check`, appointments);
+    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
+      .then(() => setState({...state, appointments}));
+    
+  }
 
   const mappedAppointments = dailyAppointments.map((appt) => {
 
@@ -64,6 +72,7 @@ export default function Application(props) {
               interview={interview}
               interviewers={dailyInterviewers}
               bookInterview={bookInterview}
+              cancelInterview={cancelInterview}
            />
   });
 

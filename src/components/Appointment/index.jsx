@@ -6,19 +6,18 @@ import Empty from './Empty';
 import Form from './Form';
 import useVisualMode from 'hooks/useVisualMode';
 import Status from './Status';
+import Confirm from './Confirm';
 
 export default function Appointment(props) {
-  const { time, interview, interviewers, bookInterview } = props;
+  const { time, interview, interviewers, bookInterview, cancelInterview } = props;
   
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
   const SAVING = "SAVING";
+  const DELETING = "DELETING";
   
-  const { mode, transition, back } = useVisualMode(
-    interview ? SHOW : EMPTY
-  );
-
+  
   const save = function(name, interviewer) {
     const interview = {
       student: name,
@@ -26,10 +25,20 @@ export default function Appointment(props) {
     };
     transition(SAVING);
     bookInterview(props.id, interview)
-      .then(() => transition(SHOW));
+    .then(() => transition(SHOW));
     
     // return interview;
   }
+  
+  const cancel = function(id) {
+    transition(DELETING);
+    cancelInterview(id)
+    .then(() => transition(EMPTY));
+  }
+
+  const { mode, transition, back } = useVisualMode(
+    interview ? SHOW : EMPTY
+  );
 
   return (
     <>
@@ -40,7 +49,8 @@ export default function Appointment(props) {
       <article time={time} className="appointment">No Appointments</article> 
       */}
 
-      {mode === SAVING && <Status />}
+      {mode === SAVING && <Status>Saving</Status>}
+      {mode === DELETING && <Status>Deleting</Status>}
 
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
 
@@ -48,6 +58,7 @@ export default function Appointment(props) {
         <Show 
           student={interview.student}
           interviewer={interview.interviewer.name}
+          onDelete={() => cancel(props.id)}
         />
       )}
 
@@ -56,7 +67,7 @@ export default function Appointment(props) {
           onSubmit={console.log("Clicked")}
           interviewers={interviewers}
           onSave={save}
-          onCancel={back}
+          onDelete={() => cancel(props.id)}
         />
       )}
 
