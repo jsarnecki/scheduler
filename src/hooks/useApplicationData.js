@@ -31,7 +31,7 @@ export default function useApplicationData() {
   //We would need to take the appoiments arr from day, and loop thru each of those pertaining to appointments,
   // and count how many interviews are null..
   //Will need to check if it's the same spot being updated or if it's new
-  const changeSpots = function(today, id, updateAppointments) {
+  const changeSpots = function(today, updateAppointments) {
     //get today.appointments arr
     let dayAppts;
     for (let day of state.days) {
@@ -43,36 +43,40 @@ export default function useApplicationData() {
     //Then loop thru comparing if they are included in dayAppts, pushing appt into another arr
     //Count the nulls -- compare to previous days.day.spots count
 
-    const appsArr = dayAppts.map(id => updateAppointments[id]);
+    const apptsArr = dayAppts.map(id => updateAppointments[id]);
 
-    // const allAppointments = Object.values(updateAppointments);
-    // let apptsArr = [];
-    // for (let apt of allAppointments) {
-    //   if (dayAppts.includes(apt.id)) {
-    //     apptsArr.push(apt);
-    //   }
-    // }
  
     let nullCount = 0;
-    for (let apt of appsArr) {
+    for (let apt of apptsArr) {
       if (apt.interview === null) {
         nullCount++;
       }
     }
-
-    //GET ID === DAY TO ACCESS ARRAY
     
-    //Using return val, check state.appts find the day with given ID, see if the slot is null
-    //If slot is not null, means it's an edit - return with nothing
-    //If slot is null, we check inside the state.days[id === day].spots -> is it same as returnVal?
-    //If not, we change the state.days[day].spots appropriately, and set inside the state alongside the appointments
-    //BUT WE MUST CHECK IF IT IS DOUBLE ADDING SPOTS OR NOT
-    
-    
-    console.log("filtered appts arr", appsArr)
+    console.log("filtered appts arr", apptsArr)
     console.log("null count", nullCount);
     
     return nullCount;
+  }
+
+  const findDay = function(id) {
+    const dayLookUp = {
+      Monday: [1, 2, 3, 4, 5],
+      Tuesday: [6, 7, 8, 9, 10],
+      Wednesday: [11, 12, 13, 14, 15],
+      Thursday: [16, 17, 18, 19, 20],
+      Friday: [21, 22, 23, 24, 25]
+    };
+
+    const dayKeys = Object.keys(dayLookUp);
+    const returnDay = dayKeys.find(key => dayLookUp[key].includes(id));
+    // Gives day of the week the id param matches
+
+    const dayId = dayKeys.indexOf(returnDay);
+    // Finds the dayId of the returnDay
+    console.log("dayID:", dayId);
+
+    return { returnDay, dayId };
   }
 
 
@@ -97,18 +101,18 @@ export default function useApplicationData() {
         //Using the appointment id, can probably access updating the days.spots state
         //If using the bookInterview to save edits, we can't update the day.spots state everytime it's called.. need to check first
 
-        const dayLookUp = {monday: 0, tuesday: 1};
+        const { returnDay, dayId } = findDay(id);
         
-        console.log("before setState:", id, state.days[0].name, state.days[0].spots);
-        let spotCount = changeSpots(state.days[0].name, id, appointments);
-        console.log("before addition:", state.days[0].spots, "after addition:", spotCount);
-        const days = [...state.days];
-        // const monday = days[0];
-        days[0].spots = spotCount;
-        // days[0] = monday;
-        
-        setState({...state, days: days,  appointments: appointments});
-        // changeSpots(state.day, id);
+        console.log("before setState:", id, state.days[dayId].name, state.days[dayId].spots);
+
+        let spotCount = changeSpots(returnDay, appointments);
+
+        console.log("before addition:", state.days[dayId].spots, "after addition:", spotCount);
+
+        const newDays = [...state.days];
+        newDays[dayId].spots = spotCount;
+
+        setState({...state, days: newDays,  appointments: appointments});
 
 
       });
