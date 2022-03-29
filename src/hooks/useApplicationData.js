@@ -11,6 +11,24 @@ export default function useApplicationData() {
   });
 
   const setDay = day => setState({ ...state, day });
+
+  //check how many null interviews are
+  //We would need to take the appoiments arr from day, and loop thru each of those pertaining to appointments,
+  // and count how many interviews are null..
+  //Will need to check if it's the same spot being updated or if it's new
+  const changeSpots = function(today) {
+    //get today.appointments arr
+    let dayAppts;
+      for (let day of state.days) {
+        if (day.name === today) {
+          dayAppts = day.appointments;
+        }
+      }
+
+    console.log("appts today:", dayAppts);
+  }
+
+
   
   useEffect(() => {
     Promise.all([
@@ -36,6 +54,10 @@ export default function useApplicationData() {
 
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview})
       .then(() => {
+        //Using the appointment id, can probably access updating the days.spots state
+        //If using the bookInterview to save edits, we can't update the day.spots state everytime it's called.. need to check first
+        console.log("id", id);
+        changeSpots(state.day);
         setState({...state, appointments: appointments});
       });
   }
