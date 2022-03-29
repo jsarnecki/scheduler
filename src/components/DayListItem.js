@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import "components/DayListItem.scss";
 import classNames from "classnames";
 

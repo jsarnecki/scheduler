@@ -29,7 +29,7 @@ export default function Appointment(props) {
       interviewer
     };
     console.log(interview);
-    transition(SAVING);
+    transition(SAVING, true);
     bookInterview(props.id, interview)
     .then(() => transition(SHOW))
     .catch(() => {
@@ -46,9 +46,11 @@ export default function Appointment(props) {
       })
   }
 
-  const { mode, transition, back } = useVisualMode(
+  const { mode, transition, back, history } = useVisualMode(
     interview ? SHOW : EMPTY
   );
+
+  //console.log("history:", history);
 
   return (
     <>
@@ -60,8 +62,8 @@ export default function Appointment(props) {
 
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
 
-      {mode === ERROR_DELETE && <Error message={"Oops!  Couldn't delete"} onClose={() => transition(SHOW)} />}
-      {mode === ERROR_SAVE && <Error message={"Oops!  Couldn't save"} onClose={() => transition(SHOW)} />}
+      {mode === ERROR_DELETE && <Error message={"Oops!  Couldn't delete"} onClose={() => transition(back)} />}
+      {mode === ERROR_SAVE && <Error message={"Oops!  Couldn't save"} onClose={() => transition(back)} />}
 
       {mode === EDIT && (
           <Form 
@@ -83,8 +85,7 @@ export default function Appointment(props) {
         )}
 
       {mode === CREATE && (
-        <Form 
-          onSubmit={console.log("Clicked")}
+        <Form
           interviewers={interviewers}
           onSave={save}
           onCancel={back}

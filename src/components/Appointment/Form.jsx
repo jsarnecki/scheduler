@@ -4,13 +4,10 @@ import InterviewerList from 'components/InterviewerList';
 import Button from 'components/Button';
 
 export default function Form(props) {
-  const { onSubmit, interviewers, onSave, onCancel } = props;
+  const { interviewers, onSave, onCancel } = props;
 
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-
-  //onSave now contains the new interview object
-  //Do we use the state student and state interviewer to pass into save / bookInterview???
 
   const onChangeStudent = function(event) {
     setStudent(event.target.value);
@@ -37,7 +34,7 @@ export default function Form(props) {
             type="text"
             placeholder="Enter Student Name"
             value={student}
-            onChange={onChangeStudent}
+            onChange={(e) => onChangeStudent(e)}
           />
         </form>
         <InterviewerList 
