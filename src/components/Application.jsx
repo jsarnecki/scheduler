@@ -42,12 +42,13 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
+    
+    console.log("Made it to bookInterview:", appointments[id]);
 
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview})
-      .then((res) => {
+      .then(() => {
         setState({...state, appointments: appointments});
       })
-      .catch(err => console.log(err));
  }
 
 

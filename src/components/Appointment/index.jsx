@@ -7,6 +7,7 @@ import Form from './Form';
 import useVisualMode from 'hooks/useVisualMode';
 import Status from './Status';
 import Confirm from './Confirm';
+import Error from './Error';
 
 export default function Appointment(props) {
   const { time, interview, interviewers, bookInterview, cancelInterview } = props;
@@ -18,6 +19,8 @@ export default function Appointment(props) {
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
+  const ERROR_SAVE ="ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
   
   
   const save = function(name, interviewer) {
@@ -25,15 +28,22 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
+    console.log(interview);
     transition(SAVING);
     bookInterview(props.id, interview)
-    .then(() => transition(SHOW));
+    .then(() => transition(SHOW))
+    .catch(() => {
+      transition(ERROR_SAVE, true);
+    })
   }
 
   const confirmCancel = function(id) {
-    transition(DELETING);
+    transition(DELETING, true);
     cancelInterview(id)
-      .then(() => transition(EMPTY));
+      .then(() => transition(EMPTY))
+      .catch(() => {
+        transition(ERROR_DELETE, true);
+      })
   }
 
   const { mode, transition, back } = useVisualMode(
@@ -49,6 +59,9 @@ export default function Appointment(props) {
       {mode === CONFIRM && <Confirm onConfirm={() => confirmCancel(props.id)} onCancel={back} message={"Are you sure you would like to delete?"} />}
 
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
+
+      {mode === ERROR_DELETE && <Error message={"Oops!  Couldn't delete"} onClose={() => transition(SHOW)} />}
+      {mode === ERROR_SAVE && <Error message={"Oops!  Couldn't save"} onClose={() => transition(SHOW)} />}
 
       {mode === EDIT && (
           <Form 
@@ -74,7 +87,7 @@ export default function Appointment(props) {
           onSubmit={console.log("Clicked")}
           interviewers={interviewers}
           onSave={save}
-          onDelete={() => transition(CONFIRM)}
+          onCancel={back}
         />
       )}
 
