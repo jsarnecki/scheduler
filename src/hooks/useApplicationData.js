@@ -12,7 +12,6 @@ export default function useApplicationData() {
 
   const setDay = day => setState({ ...state, day });
 
-  
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
@@ -24,37 +23,25 @@ export default function useApplicationData() {
     });
   }, []);
 
-  //--------------------------------------------------------------------------
-
-
- //check how many null interviews are
-  //We would need to take the appoiments arr from day, and loop thru each of those pertaining to appointments,
-  // and count how many interviews are null..
-  //Will need to check if it's the same spot being updated or if it's new
   const changeSpots = function(today, updateAppointments) {
-    //get today.appointments arr
     let dayAppts;
+    // Find all days (array of appt ids) that pertain to the day being passed in
     for (let day of state.days) {
       if (day.name === today) {
         dayAppts = day.appointments;
       }
     }
-    //Appointments in obj - turn to arr
-    //Then loop thru comparing if they are included in dayAppts, pushing appt into another arr
-    //Count the nulls -- compare to previous days.day.spots count
 
     const apptsArr = dayAppts.map(id => updateAppointments[id]);
+    // With the array of appt ids, filter the updatedAppts that hold that id
 
- 
     let nullCount = 0;
+    // Count all the null values, ie empty appt blocks
     for (let apt of apptsArr) {
       if (apt.interview === null) {
         nullCount++;
       }
     }
-    
-    console.log("filtered appts arr", apptsArr)
-    console.log("null count", nullCount);
     
     return nullCount;
   }
@@ -74,17 +61,10 @@ export default function useApplicationData() {
 
     const dayId = dayKeys.indexOf(returnDay);
     // Finds the dayId of the returnDay
-    console.log("dayID:", dayId);
 
     return { returnDay, dayId };
   }
 
-
-
-
-
-
-  //-----------------------------------------------------------------------------------------
   const bookInterview = function(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -98,32 +78,37 @@ export default function useApplicationData() {
 
     return axios.put(`/api/appointments/${id}`, {interview})
       .then(() => {
-        //Using the appointment id, can probably access updating the days.spots state
-        //If using the bookInterview to save edits, we can't update the day.spots state everytime it's called.. need to check first
 
         const { returnDay, dayId } = findDay(id);
-        
-        console.log("before setState:", id, state.days[dayId].name, state.days[dayId].spots);
-
-        let spotCount = changeSpots(returnDay, appointments);
-
-        console.log("before addition:", state.days[dayId].spots, "after addition:", spotCount);
+        // Using appt id, returns the day string, and the id pertaining to the day
+        const spotCount = changeSpots(returnDay, appointments);
+        // Returns nullCount of appointment blocks in the given day, counting the new appointments obj
 
         const newDays = [...state.days];
+        // Updates the spots using the return nullCount, accessing the id/index of state.days with dayId
         newDays[dayId].spots = spotCount;
 
         setState({...state, days: newDays,  appointments: appointments});
-
-
       });
   }
 
   const cancelInterview = function(id) {
     const appointments = {...state.appointments};
     appointments[id].interview = null;
-    console.log(`Appointment ${id} check`, appointments);
+
     return axios.delete(`/api/appointments/${id}`)
-      .then(() => setState({...state, appointments}));
+      .then(() => {
+
+        const { returnDay, dayId } = findDay(id);
+        const spotCount = changeSpots(returnDay, appointments);
+        // Returns nullCount of appointment blocks in the given day, counting the new appointments obj
+
+        const newDays = [...state.days];
+        // Update spots of specific day
+        newDays[dayId].spots = spotCount;
+
+        setState({...state, days: newDays,  appointments: appointments});
+      });
     }
 
     return {

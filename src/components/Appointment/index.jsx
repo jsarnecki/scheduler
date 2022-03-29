@@ -46,11 +46,9 @@ export default function Appointment(props) {
       })
   }
 
-  const { mode, transition, back, history } = useVisualMode(
+  const { mode, transition, back } = useVisualMode(
     interview ? SHOW : EMPTY
   );
-
-  //console.log("history:", history);
 
   return (
     <>
