@@ -17,6 +17,7 @@ export default function Appointment(props) {
   const SAVING = "SAVING";
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
+  const EDIT = "EDIT";
   
   
   const save = function(name, interviewer) {
@@ -27,12 +28,6 @@ export default function Appointment(props) {
     transition(SAVING);
     bookInterview(props.id, interview)
     .then(() => transition(SHOW));
-    
-    // return interview;
-  }
-
-  const cancel = function() {
-    transition(CONFIRM);
   }
 
   const confirmCancel = function(id) {
@@ -48,12 +43,6 @@ export default function Appointment(props) {
   return (
     <>
     <Header time={time} />
-      {/*time ? 
-      <article time={time} className="appointment">Appointment at {time}</article> 
-        :
-      <article time={time} className="appointment">No Appointments</article> 
-      */}
-
 
       {mode === SAVING && <Status message={"Saving"} />}
       {mode === DELETING && <Status message={"Deleting"} />}
@@ -61,20 +50,31 @@ export default function Appointment(props) {
 
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
 
-      {mode === SHOW && (
-        <Show 
-          student={interview.student}
-          interviewer={interview.interviewer.name}
-          onDelete={() => cancel()}
-        />
+      {mode === EDIT && (
+          <Form 
+            student={interview.student}
+            interviewer={interview.interviewer.id}
+            interviewers={interviewers}
+            onSave={save}
+            onCancel={back}
+        /> 
       )}
+      
+      {mode === SHOW && (
+          <Show 
+            student={interview.student}
+            interviewer={interview.interviewer.name}
+            onDelete={() => transition(CONFIRM)}
+            onEdit={() => transition(EDIT)}
+          />
+        )}
 
       {mode === CREATE && (
         <Form 
           onSubmit={console.log("Clicked")}
           interviewers={interviewers}
           onSave={save}
-          onDelete={() => cancel()}
+          onDelete={() => transition(CONFIRM)}
         />
       )}
 
