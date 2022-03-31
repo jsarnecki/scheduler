@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 import useApplicationData from "hooks/useApplicationData";
 import "components/Application.scss";
+import "components/Appointment/styles.scss";
 
 export default function Application(props) {
 
@@ -54,7 +55,9 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {mappedAppointments}
-        <Appointment key="last" time="5pm" bookInterview={bookInterview} interviewers={dailyInterviewers}  />
+        <div className="last-appointment">
+        <Appointment key="last" time="5pm" />
+        </ div>
       </section>
     </main>
   );
