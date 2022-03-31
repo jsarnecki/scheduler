@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import "index.scss";
 
 import DayList from "components/DayList.jsx";
 import DayListItem from "components/DayListItem.js";
@@ -12,13 +13,10 @@ import Confirm from "components/Appointment/Confirm";
 import Status from "components/Appointment/Status";
 import Error from "components/Appointment/Error";
 import Form from "components/Appointment/Form";
+import Button from "components/Button.jsx";
 
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-
-import "index.scss";
-
-import Button from "components/Button.jsx";
 
 storiesOf("Button", module)
   .addParameters({
@@ -197,4 +195,4 @@ storiesOf("Appointment", module)
       />
       <Appointment time="5pm" />
     </Fragment>
-  ))
+  ));

@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 export default function InterviewerListItem(props) {
   const { name, avatar, selected, setInterviewer } = props;
+  
   const interviewerClass = classNames({
     "interviewers__item": true, 
     "interviewers__item--selected": selected
