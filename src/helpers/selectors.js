@@ -1,23 +1,3 @@
-// export function getAppointmentsForDay(state, day) {
-//   const filteredApptsForDay = [];
-//   for (const d of state.days) {
-//     //Loop thru days objs
-//     if (d.name === day) {
-//       //Find day name matched with given day arg
-//       for (let id of d.appointments) {
-//         //Loop thru the appointment ids of matched day
-//         for (let obj in state.appointments) {
-//           //Loop thru state.appointments obj to match against day ids
-//           if (id == obj) {
-//             //If the id of the days appointment matches the state.appoiments id, push into arr
-//             filteredApptsForDay.push(state.appointments[obj]);
-//           }
-//         }
-//       }
-//     }
-//   }
-//   return filteredApptsForDay;
-// }
 
 export function getAppointmentsForDay(state, day) {
   let appointmentIdArr = [];
@@ -29,14 +9,14 @@ export function getAppointmentsForDay(state, day) {
   }
 
   if (!appointmentIdArr.length) {
-    //If no days match, return empty
+    // If no days match, return empty
     return [];
   }
 
   const appointmentsObjArr = Object.values(state.appointments);
-  //Take the appointments obj of objs into arr
+  // Take the appointments obj of objs into arr
   const appointmentsReturn = appointmentsObjArr.filter(apt => {
-    //Filter out the ids that match with given day apptIds
+    // Filter out the ids that match with given day apptIds
     if (appointmentIdArr.includes(apt.id)) {
       return apt;
     }
@@ -47,37 +27,48 @@ export function getAppointmentsForDay(state, day) {
 
 
 export function getInterview(state, interview) {
+  // The given interview only has the interviewer's id
+  // Return an obj that adds the obj of the interviewer from state
   if (!interview) {
     return null;
   }
+
   const returnObj = {...interview};
   const id = interview.interviewer;
-  for (const obj in state.interviewers) {
-    if (obj == id) {
-      returnObj.interviewer = state.interviewers[obj];
+
+  const interviewersArr = Object.values(state.interviewers);
+  for (let person of interviewersArr) {
+    if (person.id === id) {
+      returnObj.interviewer = person;
     }
   }
+
   return returnObj;
 }
 
 export function getInterviewersForDay(state, day) {
-  const filteredInterviewersForDay = [];
+  //Returns an array of interviewerObjs pertaining to the given day
 
-  for (const d of state.days) {
-    //Loop thru days objs
+  let interviewersIds = [];
+  for (let d of state.days) {
     if (d.name === day) {
-      //Find day name matched with given day arg
-      for (let id of d.interviewers) {
-        //Loop thru the appointment ids of matched day
-        for (let obj in state.interviewers) {
-          //Loop thru state.interviewers obj to match against day ids
-          if (id == obj) {
-            //If the id of the days appointment matches the state.appoiments id, push into arr
-            filteredInterviewersForDay.push(state.interviewers[obj]);
-          }
-        }
-      }
+      // d.interviewers is an array of interviewers' ids
+      interviewersIds = [...d.interviewers];
     }
   }
+
+  if (!interviewersIds.length) {
+    return [];
+  }
+
+  const interviewerObjArr = Object.values(state.interviewers);
+
+  const filteredInterviewersForDay = interviewerObjArr.filter(interviewer => {
+    if (interviewersIds.includes(interviewer.id)) {
+      // Compares and filters based on the ids
+      return interviewer;
+    }
+  });
+
   return filteredInterviewersForDay;
 }

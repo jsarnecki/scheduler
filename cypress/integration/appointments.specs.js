@@ -28,10 +28,8 @@ describe("Appointments", () => {
     cy.get("[alt=Edit]").first().click({force:true});
     
     cy.get("[data-testid=student-name-input]").clear().type("Tori Malcolm");
-
     cy.contains("Save").click();
 
-    // cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Tori Malcolm");
   });
 
@@ -46,9 +44,5 @@ describe("Appointments", () => {
       .should("not.exist");
 
   })
-
-
-
-
 
 });

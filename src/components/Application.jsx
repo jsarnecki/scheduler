@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
