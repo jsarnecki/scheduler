@@ -4,11 +4,11 @@ Interview Scheduler is a single-page application designed for allowing a student
 
 ## Final Product
 
-!["Scheduler home"]()
+!["Scheduler home"](https://github.com/jsarnecki/scheduler/blob/master/public/scheduler_home.png?raw=true)
 
-!["Scheduler add"](https://github.com/jsarnecki/scheduler/blob/master/public/Screenshot%20from%202022-03-30%2020-10-28.png?raw=true)
+!["Scheduler add"](https://github.com/jsarnecki/scheduler/blob/master/public/scheduler_add.png?raw=true)
 
-!["Scheduler confirm delete"](https://github.com/jsarnecki/scheduler/blob/master/public/Screenshot%20from%202022-03-30%2020-11-00.png?raw=true)
+!["Scheduler confirm delete"](https://github.com/jsarnecki/scheduler/blob/master/public/scheduler_confirm.png?raw=true)
 
 ## Dependancies
 
