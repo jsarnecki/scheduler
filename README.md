@@ -19,13 +19,13 @@ Interview Scheduler is a single-page application designed for allowing a student
 - @testing-library/react-hooks
 - React-test-renderer
 - Babel
-- ["Scheduler-Api"](https://github.com/jsarnecki/scheduler-api)
+- [Scheduler-Api](https://github.com/jsarnecki/scheduler-api)
 
 ## Getting Started
 
 - Install all dependancies.
 - Run `npm start` to load the development server in your host machine, as virtual machines like Vagrant don't compile correctly.
-- Make sure the ["scheduler-api"](https://github.com/jsarnecki/scheduler-api) is also concurrently running on your host machine to run the live psql database.
+- Make sure the [scheduler-api](https://github.com/jsarnecki/scheduler-api) is also concurrently running on your host machine to run the live psql database.
 - The development server should open up your browser and bring you to localhost:8000.
 - You are now able to start scheduling!
 - On the left navigation bar you can click on any day you wish to schedule.  Each day will show a live count of how many spots are available to be scheduled.
