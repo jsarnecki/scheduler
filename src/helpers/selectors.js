@@ -19,6 +19,8 @@ export function getAppointmentsForDay(state, day) {
     // Filter out the ids that match with given day apptIds
     if (appointmentIdArr.includes(apt.id)) {
       return apt;
+    } else {
+      return null
     }
   });
 
@@ -67,6 +69,8 @@ export function getInterviewersForDay(state, day) {
     if (interviewersIds.includes(interviewer.id)) {
       // Compares and filters based on the ids
       return interviewer;
+    } else {
+      return null;
     }
   });
 

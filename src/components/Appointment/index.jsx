@@ -22,22 +22,22 @@ export default function Appointment(props) {
   const ERROR_SAVE ="ERROR_SAVE";
   const ERROR_DELETE = "ERROR_DELETE";
   
-  
   const save = function(name, interviewer) {
     const interview = {
       student: name,
       interviewer
     };
-    console.log(interview);
+    // Uses transitions to navigate between booking states
     transition(SAVING, true);
     bookInterview(props.id, interview)
     .then(() => transition(SHOW))
     .catch(() => {
-      transition(ERROR_SAVE, true);
+      transition(ERROR_SAVE);
     })
   }
 
   const confirmCancel = function(id) {
+    // Uses transitions to navigate between canceling states
     transition(DELETING, true);
     cancelInterview(id)
       .then(() => transition(EMPTY))
